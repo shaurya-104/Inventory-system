@@ -20,4 +20,23 @@ def login():
                 return "user with this role is not present"
         else :
              return "Invalid info"
-
+@app.route('/signup',method=['GET','POST'])
+def signup():
+    if request.method == 'GET':
+        return render_template('signup')
+    if request.post == 'POST':
+       username = request.form.get('username')
+       password = request.form.get('password')
+       role = request.form.get('role')
+       key = request.form.get('role')
+       if(key == "qwertyuiop" and role == 'admin'):
+           new_user = userdata(user_name=username,role=role,password=password)
+       elif role == 'employee':
+           new_user = userdata(user_name=username,role=role,password=password)
+       else :
+           return "Invalid response"
+       db.session.add(new_user)
+       db.session.commit()
+    
+if __name__ == "__main__":
+    app.run(host='0.0.0.0',debug=True)
