@@ -34,7 +34,7 @@ class logs(db.Model):
 
     def __repr__(self):
         return f"{self.id}{self.worker_name}{self.selling_price}"
-#Shift this to running file later  
+ 
 with app.app_context():
     db.create_all()
     print("database is sucessfully created")

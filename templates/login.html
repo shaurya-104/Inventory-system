@@ -1,0 +1,16 @@
+{%extends "base.html"%}
+{%block title%}Login Portal{%endblock%}
+
+{%block content%}
+<form method="POST" action="{{url_for('login')}}">
+    <label for="role"></label>
+    <select name="role" id="role" name="role" required>
+        <option value="admin">Owner</option>
+        <option value="employee">Employee</option>
+    </select><br>
+    <input type="text" name="username" placeholder="username" required><br>
+    <input type="password" name="password" placeholder="username" required><br>
+    <input type="submit">
+    <p>Dont have an id? <a href="{{url_for('')}}">SIGN UP</a></p>
+</form>
+{%endblock%}
