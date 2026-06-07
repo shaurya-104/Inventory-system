@@ -1,3 +1,9 @@
+function openBill() {
+    document.getElementById("Bill").style.display = "block";
+}
+function closeBill() {
+    document.getElementById("Bill").style.display = "none";
+}
 fetch('/api/inventory')
     .then(response=>{
         if(!response.ok){

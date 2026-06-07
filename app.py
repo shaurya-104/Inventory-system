@@ -122,6 +122,10 @@ def get_inventory():
 def employee():
     return render_template("employee.html")
 
+@app.route('/employee/billing_Dashboard',methods=['GET'])
+def billing_Dashboard():
+    return render_template("billing.html")
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0',debug=True)
