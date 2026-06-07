@@ -1,7 +1,10 @@
-function open() {
+let currentEditId = null;
+let currentDeleteId = null;
+
+function openAdd() {
     document.getElementById("add").style.display = "block";
 }
-function close() {
+function closeAdd() {
     document.getElementById("add").style.display = "none";
 }
 function closedelete() {
@@ -9,6 +12,20 @@ function closedelete() {
 }
 function closeedit() {
     document.getElementById("edit").style.display = "none";
+}
+
+function openEditModal(id, name, qty, purchase, listing) {
+    currentEditId = id;
+    document.getElementById("updateName").value = name;
+    document.getElementById("updateQuantity").value = qty;
+    document.getElementById("updatePurchase").value = purchase;
+    document.getElementById("updateListing").value = listing;
+    document.getElementById("edit").style.display = "block";
+}
+
+function confirmDelete(id) {
+    currentDeleteId = id;
+    document.getElementById("delete").style.display = "block";
 }
 
 fetch('/api/inventory')
@@ -23,7 +40,7 @@ fetch('/api/inventory')
     .then(data=>{
         const Inventory_data = data.Inventory_data
         const user_data = data.user_data
-        const sell_logs =data.sell_logs
+        const sell_logs = data.sell_logs
         const table = document.getElementById("inventoryTable")
     
     Inventory_data.forEach(item => {
@@ -34,26 +51,16 @@ fetch('/api/inventory')
             const Quantity = newRow.insertCell(2);
             const Purchase = newRow.insertCell(3);
             const Listing = newRow.insertCell(4);
-            const Delete = newRow.insertCell(5);
-            const edit = newRow.insertCell(6);  
+            const Actions = newRow.insertCell(5);
 
             Id.innerHTML = item.id;
             Name.innerHTML = item.item_name;
             Quantity.innerHTML = item.quantity;
             Purchase.innerHTML = "₹" + item.purchase_price;
             Listing.innerHTML = "₹" + item.listing_price;
-            Delete.innerHTML = `<button onclick="confirmDelete(${item.id})">Delete</button>`;
-            edit.innerHTML = `<button onclick="openEditModal(${item.id})">Edit</button>`;
-            
-            Delete.addEventListener('click',function(){
-                const Yes = document.getElementById('Yes')
-                const No = document.getElementById('No')
-                document.getElementById("delete").style.display = "block";
-
-            })
-            
+            Actions.innerHTML = `<button onclick="openEditModal(${item.id}, '${item.item_name}', ${item.quantity}, ${item.purchase_price}, ${item.listing_price})">Edit</button> <button onclick="confirmDelete(${item.id})">Delete</button>`;
     });
-    user.data.forEach(item=>{
+    user_data.forEach(item=>{
         const ussername = item.user_name
     })
     sell_logs.forEach(item=>{
@@ -84,8 +91,7 @@ addForm.addEventListener("submit", function(event) {
     })
     .then(Response => Response.json())
     .then(data => {
-        console.log(data.message); 
-        closeModal();              
+        closeAdd();              
         window.location.reload(); 
     })
     .catch(error => {
@@ -93,35 +99,57 @@ addForm.addEventListener("submit", function(event) {
     });
 }); 
         
-edit.addEventListener("click", function(event) {
+const editItemForm = document.getElementById('editItemForm');
+editItemForm.addEventListener("submit", function(event) {
     event.preventDefault();
     const itemNameupdate = document.getElementById("updateName").value;
     const itemQuantityupdate = document.getElementById("updateQuantity").value;
     const itemPurchaseupdate = document.getElementById("updatePurchase").value;
     const itemListingupdate = document.getElementById("updateListing").value;
-    const editItemForm = document.getElementById('editItemForm').value;
 
     fetch('/api/inventory/edit', {
-        method: 'POST',
+        method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-            "item_name": itemName,
-            "quantity": itemQuantity,
-            "purchase_price": itemPurchase,
-            "listing_price": itemListing,
-            "user_id" : id
+            "item_name": itemNameupdate,
+            "quantity": itemQuantityupdate,
+            "purchase_price": itemPurchaseupdate,
+            "listing_price": itemListingupdate,
+            "id": currentEditId
         })
     })
-        .then(Response => Response.json())
+    .then(Response => Response.json())
     .then(data => {
-        console.log(data.message); 
-        closeModal();              
+        closeedit();              
         window.location.reload(); 
     })
     .catch(error => {
-        console.error("Error adding item:", error);
+        console.error("Error editing item:", error);
     });
 }); 
 
-Delete.addEventListener("click",fucntion(event))
+const deleteSubmit = document.getElementById("deleteSubmit");
+deleteSubmit.addEventListener("click", function(event) {
+    event.preventDefault();
+    const choice = document.querySelector('input[name="choice"]:checked');
     
+    if (choice && choice.value === "Yes") {
+        fetch('/api/inventory/delete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                "id": currentDeleteId
+            })
+        })
+        .then(Response => Response.json())
+        .then(data => {
+            closedelete();              
+            window.location.reload(); 
+        })
+        .catch(error => {
+            console.error("Error deleting item:", error);
+        });
+    } else {
+        closedelete();
+    }
+});

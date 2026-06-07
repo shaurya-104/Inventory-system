@@ -76,16 +76,16 @@ def request_edit():
         return jsonify({"status": "success", "message": "Item edited in database!"})
     return jsonify({"status": "error", "message": "Item not found"}), 404
 
-@app.route('/api/inventory/delete',methods=['POST'])
+@app.route('/api/inventory/delete', methods=['DELETE'])
 def request_delete():
-    item_name = request.json.get('item_name')
-    quantity = request.json.get('quantity')
-    purchase_price = request.json.get('purchase_price')
-    listing_price = request.json.get('listing_price')
-    delete_item = Items(item_name=item_name,quantity=quantity,purchase_price=purchase_price,listing_price=listing_price)
-    db.session.delete(delete_item)
-    db.session.commit()
-    return jsonify({"status": "success", "message": "Item edited in database!"})
+    data = request.json
+    item_id = data.get('id')
+    item_to_delete = Items.query.get(item_id)
+    if item_to_delete:
+        db.session.delete(item_to_delete)
+        db.session.commit()
+        return jsonify({"status": "success"})
+    return jsonify({"status": "error", "message": "Item not found"}), 404
     
 @app.route('/api/inventory')
 def get_inventory():

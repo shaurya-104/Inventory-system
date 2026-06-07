@@ -4,7 +4,7 @@
 <div>
     <table id="inventoryTable" border="1" cellpadding="10">
         <tr>
-            <th colspan="5">Master Inventory</th> 
+            <th colspan="6">Master Inventory</th> 
         </tr>
         <tr>
             <th>Id</th>
@@ -12,7 +12,7 @@
             <th>Quantity</th>
             <th>Purchase Price</th>
             <th>Listing price</th>
-            <th>Edit</th>
+            <th>Actions</th>
         </tr>
     </table>
 </div>
@@ -26,9 +26,9 @@
     <input type="radio" name="choice" value="NO">
         No
     </label><br>
-    <input type="submit">
+    <input type="submit" id="deleteSubmit">
 </div>
-<div id="edit">
+<div id="edit" style="display: none;">
         <span onclick="closeedit()">X</span>        
         <h3>update Item</h3> 
         <form id="editItemForm">
@@ -39,11 +39,11 @@
             <input type="submit" value="Save Item">
         </form>
 </div>
-<div style="display: none;">
-<button onclick="open()">+ Add New Item</button>
-<div id="add">   
+<div>
+<button onclick="openAdd()">+ Add New Item</button>
+<div id="add" style="display: none;">   
      <div>        
-        <span onclick="close()">X</span>        
+        <span onclick="closeAdd()">X</span>        
         <h3>Add to Inventory</h3>        
         <form id="addItemForm">
             <input type="text" id="newName" placeholder="Item Name" required><br>
@@ -53,6 +53,7 @@
             <input type="submit" value="Save Item">
         </form>
     </div>
+</div>
 </div>
 <script src="{{ url_for('static', filename='admin.js') }}"></script>
 {%endblock%}
