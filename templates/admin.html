@@ -1,21 +1,33 @@
 {%extends 'base.html'%}
 {%block title%}Admin Dashboard{%endblock%}
 {%block content%}
-<form method='POST' action="{{url_for('admin_dashboard')}}">
-</form>
 <div>
     <table id="inventoryTable" border="1" cellpadding="10">
-        <tr>Inventory</tr>
         <tr>
-        <th>
+            <th colspan="5">Master Inventory</th> 
+        </tr>
+        <tr>
             <th>Id</th>
             <th>Item name</th>
             <th>Quantity</th>
             <th>Purchase Price</th>
             <th>Listing price</th>
-        </th>
         </tr>
     </table>
+</div>
+<button onclick="openModal()">+ Add New Item</button>
+<div id="addModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5);">   
+     <div style="background: white; width: 300px; margin: 100px auto; padding: 20px; border-radius: 8px;">        
+        <span onclick="closeModal()" style="float: right; cursor: pointer; color: red; font-weight: bold;">X</span>        
+        <h3>Add to Inventory</h3>        
+        <form id="addItemForm">
+            <input type="text" id="newName" placeholder="Item Name" required><br><br>
+            <input type="number" id="newQuantity" placeholder="Quantity" required><br><br>
+            <input type="number" id="newPurchase" step="0.01" placeholder="Purchase Price" required><br><br>
+            <input type="number" id="newListing" step="0.01" placeholder="Listing Price" required><br><br>
+            <input type="submit" value="Save Item">
+        </form>
+    </div>
 </div>
 <script src="{{ url_for('static', filename='admin.js') }}"></script>
 {%endblock%}

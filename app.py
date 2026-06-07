@@ -13,7 +13,7 @@ def login():
         user = userdata.query.filter_by(user_name=username).first()
         if user and user.password == password:
             if user.role == 'admin':
-                return admin_dashboard()
+                return redirect(url_for('admin_dashboard'))
             elif user.role == 'employee':
                 return "hi employee"
             else :
@@ -39,14 +39,23 @@ def signup():
        db.session.commit()
        return redirect(url_for('login'))
     
-@app.route("/admin_Dashboard",methods=['GET','POST'])
+@app.route("/admin_Dashboard",methods=['GET'])
 def admin_dashboard():
     if request.method == 'GET':
          return render_template('admin.html')
-    if request.method == 'POST':
-        return ""
 
 
+@app.route('/api/inventory/add',methods=['POST'])
+def request_create():
+    item_name = request.json.get('item_name')
+    quantity = request.json.get('quantity')
+    purchase_price = request.json.get('purchase_price')
+    listing_price = request.json.get('listing_price')
+
+    add_item = Items(item_name=item_name,quantity=quantity,purchase_price=purchase_price,listing_price=listing_price)
+    db.session.add(add_item)
+    db.session.commit()
+    return jsonify({"status": "success", "message": "Item added to database!"})
 
 @app.route('/api/inventory')
 def get_inventory():

@@ -13,7 +13,7 @@ fetch('/api/inventory')
         const sell_logs =data.sell_logs
         const table = document.getElementById("inventoryTable")
     
-    Inventory_data.array.forEach(item => {
+    Inventory_data.forEach(item => {
             const newRow = table.insertRow(-1);
 
             const cellId = newRow.insertCell(0);
@@ -28,7 +28,7 @@ fetch('/api/inventory')
             cellPurchase.innerHTML = "$" + item.purchase_price;
             cellListing.innerHTML = "$" + item.listing_price;
     });
-    user.data.forEach.forEach(item=>{
+    user.data.forEach(item=>{
         const ussername = item.user_name
     })
     sell_logs.forEach(item=>{
@@ -38,7 +38,17 @@ fetch('/api/inventory')
         const selling_price = item.selling_price 
     })
 })
-
-
+function openModal() {
+    document.getElementById("addModal").style.display = "block";
+}
+function closeModal() {
+    document.getElementById("addModal").style.display = "none";
+}
+fetch('/api/inventory/add', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+    })
+})
         
         
