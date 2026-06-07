@@ -1,54 +1,20 @@
-{%extends 'base.html'%}
-{%block title%}Billing Portal{%endblock%}
-{%block content%}
+{% extends 'base.html' %}
+{% block title %}Billing Portal{% endblock %}
+{% block content %}
+<h2>Billing System</h2>
+<a href="{{ url_for('employee') }}">Back to Dashboard</a>
+
 <div>
-    <table id="inventoryTable" border="1" cellpadding="10">
-        <tr>
-            <th colspan="4">Inventory</th> 
-        </tr>
-        <tr>
-            <th>Id</th>
-            <th>Item name</th>
-            <th>Quantity</th>
-            <th>Selling price</th>
-        </tr>
-    </table>
+    <h3>Select Item</h3>
+    <select id="itemSelect"></select>
+    <input type="number" id="qtyInput" placeholder="Quantity" min="1">
+    <button onclick="addToCart()">Add to Cart</button>
 </div>
-<div>
-<button onclick="openAdd()">Add item</button>
-<div id="add" style="display: none;">   
-     <div>        
-        <span onclick="closeAdd()">X</span>        
-        <h3>Add to Inventory</h3>        
-        <form id="addItemForm">
-            <input type="text" id="itemName" placeholder="Item Name" required><br>
-            <input type="number" id="itemQuantity" placeholder="Quantity" required><br>
-            <input type="number" id="sell_price" step="0.01" placeholder="Selling Price" required><br>
-            <input type="submit" value="Save Item">
-        </form>
-    </div>
-</div>
-</div>
-<div id="delete" style="display: none;">
-    <span onclick="closedelete()">X</span><br><br>
-    <label>
-    <input type="radio" name="choice" value="Yes">
-        Yes
-    </label>
-    <label>
-    <input type="radio" name="choice" value="NO">
-        No
-    </label><br>
-    <input type="submit" id="deleteSubmit">
-</div>
-<div id="edit" style="display: none;">
-        <span onclick="closeedit()">X</span>        
-        <h3>update Item</h3> 
-        <form id="editItemForm">
-            <input type="text" id="Item_edit_Name" placeholder="Item Name" required><br>
-            <input type="number" id="Item_edit_Quantity" placeholder="Quantity" required><br>
-            <input type="number" id="Item_edit_selling" step="0.01" placeholder="Selling Price" required><br>
-            <input type="submit" value="Save Item">
-        </form>
-</div>
-{%endblock%}
+
+<h3>Cart</h3>
+<ul id="cartList"></ul>
+<h3 id="finalTotal">Total: ₹0</h3>
+<button onclick="checkout()">Process Sale</button>
+
+<script src="{{ url_for('static', filename='billing.js') }}"></script>
+{% endblock %}

@@ -126,6 +126,29 @@ def employee():
 def billing_Dashboard():
     return render_template("billing.html")
 
+@app.route('/api/process_sale', methods=['POST'])
+def process_sale():
+    data = request.json
+    cart_items = data.get('items')
+    total = data.get('total')
+
+    for item in cart_items:
+        inventory_item = Items.query.filter_by(item_name=item['name']).first()
+        if inventory_item and inventory_item.quantity >= item['qty']:
+            inventory_item.quantity -= item['qty']
+            
+            new_log = logs(
+                worker_name="current_user_name",
+                selling_price=item['price'],
+                item_name=item['name'],
+                quantity_sold=item['qty']
+            )
+            db.session.add(new_log)
+        else:
+            return jsonify({"status": "error", "message": "Not enough stock!"}), 400
+
+    db.session.commit()
+    return jsonify({"status": "success"})
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0',debug=True)
