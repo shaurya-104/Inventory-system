@@ -135,7 +135,7 @@ deleteSubmit.addEventListener("click", function(event) {
     
     if (choice && choice.value === "Yes") {
         fetch('/api/inventory/delete', {
-            method: 'POST',
+            method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 "id": currentDeleteId

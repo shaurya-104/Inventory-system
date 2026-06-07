@@ -7,7 +7,6 @@ def login():
     if request.method=='GET':
         return render_template('login.html')
     if request.method=='POST':
-        role = request.form.get('role')
         username = request.form.get('username')
         password = request.form.get('password')
 
@@ -16,7 +15,7 @@ def login():
             if user.role == 'admin':
                 return redirect(url_for('admin_dashboard'))
             elif user.role == 'employee':
-                return "hi employee"
+                return redirect(url_for(employee))
             else :
                 return "user with this role is not present"
         else :
@@ -42,9 +41,7 @@ def signup():
     
 @app.route("/admin_Dashboard",methods=['GET'])
 def admin_dashboard():
-    if request.method == 'GET':
-         return render_template('admin.html')
-
+     return render_template('admin.html')
 
 @app.route('/api/inventory/add',methods=['POST'])
 def request_create():
@@ -64,7 +61,7 @@ def request_edit():
     quantity = request.json.get('quantity')
     purchase_price = request.json.get('purchase_price')
     listing_price = request.json.get('listing_price')
-    user_id = request.json.get('old_id')
+    user_id = request.json.get('id')
 
     user_edit = db.session.get(Items,user_id)
     if user_edit:
@@ -120,6 +117,11 @@ def get_inventory():
         'user_data' : user_list,
         'sell_logs' : log
     })
+
+@app.route('/employee_Dashboard',methods=['GET'])
+def employee():
+    return render_template("employee.html")
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0',debug=True)
