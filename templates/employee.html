@@ -14,9 +14,7 @@
         </tr>
     </table>
 </div>
-<form action="{{url_for('employee')}}" method="POST">
-    <input type="submit" value="Billing">
-</form>
+<a href="{{ url_for('billing_Dashboard') }}">Go to Billing</a>
 
 <script src="{{ url_for('static', filename='employee.js') }}"></script>
 {%endblock%}

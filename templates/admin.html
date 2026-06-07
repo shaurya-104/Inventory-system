@@ -1,8 +1,28 @@
 {%extends 'base.html'%}
 {%block title%}Admin Dashboard{%endblock%}
 {%block content%}
+<div id="summaryCards" class="dashboard-summaries">
+    <div class="card">
+        <h3>Total Revenue</h3>
+        <p id="totalRevenue">₹0</p>
+    </div>
+    <div class="card">
+        <h3>Items Sold</h3>
+        <p id="totalSold">0</p>
+    </div>
+    <div class="card">
+        <h3>Low Stock Alerts</h3>
+        <p id="lowStockCount">0</p>
+    </div>
+</div>
+
+<div id="searchContainer">
+    <label for="searchInput">Search:</label>
+    <input type="text" id="searchInput" placeholder="Search Inventory by Name...">
+</div>
+
 <div>
-    <table id="inventoryTable" border="1" cellpadding="10">
+    <table id="inventoryTable" border="1">
         <tr>
             <th colspan="6">Master Inventory</th> 
         </tr>
@@ -13,6 +33,18 @@
             <th>Purchase Price</th>
             <th>Listing price</th>
             <th>Actions</th>
+        </tr>
+    </table>
+</div>
+
+<div id="logsContainer">
+    <h3>Recent Sales Logs</h3>
+    <table id="logsTable" border="1">
+        <tr>
+            <th>Worker Name</th>
+            <th>Item Sold</th>
+            <th>Quantity</th>
+            <th>Sale Price</th>
         </tr>
     </table>
 </div>

@@ -31,20 +31,30 @@ function confirmDelete(id) {
 fetch('/api/inventory')
     .then(Response => {
         if(!Response.ok){
-            throw new Error('Item data is not retrived')
+            throw new Error('Item data is not retrieved');
         }
-        else{
-            return Response.json()
-    }
-})
-    .then(data=>{
-        const Inventory_data = data.Inventory_data
-        const user_data = data.user_data
-        const sell_logs = data.sell_logs
-        const table = document.getElementById("inventoryTable")
-    
-    Inventory_data.forEach(item => {
+        return Response.json();
+    })
+    .then(data => {
+        const Inventory_data = data.Inventory_data;
+        const sell_logs = data.sell_logs;
+        
+        const table = document.getElementById("inventoryTable");
+        const logsTable = document.getElementById("logsTable");
+        
+        let totalRevenueAmount = 0;
+        let totalItemsSold = 0;
+        let lowStockItems = 0;
+
+        // --- 1. POPULATE INVENTORY & FLAG LOW STOCK ---
+        Inventory_data.forEach(item => {
             const newRow = table.insertRow(-1);
+
+            // Logic: If quantity is under 5, add class and increment counter
+            if (item.quantity < 5) {
+                newRow.classList.add("low-stock");
+                lowStockItems++;
+            }
 
             const Id = newRow.insertCell(0);
             const Name = newRow.insertCell(1);
@@ -59,18 +69,51 @@ fetch('/api/inventory')
             Purchase.innerHTML = "₹" + item.purchase_price;
             Listing.innerHTML = "₹" + item.listing_price;
             Actions.innerHTML = `<button onclick="openEditModal(${item.id}, '${item.item_name}', ${item.quantity}, ${item.purchase_price}, ${item.listing_price})">Edit</button> <button onclick="confirmDelete(${item.id})">Delete</button>`;
-    });
-    user_data.forEach(item=>{
-        const ussername = item.user_name
-    })
-    sell_logs.forEach(item=>{
-        const quantity_sold = item.quantity_sold
-        const worker_name = item.worker_name
-        const sold_item = item.item_name
-        const selling_price = item.selling_price 
-    })
-})
+        });
 
+        // --- 2. POPULATE LOGS & CALCULATE MATH ---
+        if (sell_logs) {
+            sell_logs.forEach(log => {
+                // Calculate totals
+                totalRevenueAmount += (log.selling_price * log.quantity_sold);
+                totalItemsSold += log.quantity_sold;
+
+                // Build the logs table rows
+                const newRow = logsTable.insertRow(-1);
+                newRow.insertCell(0).innerHTML = log.worker_name || "Employee"; 
+                newRow.insertCell(1).innerHTML = log.sold_item;
+                newRow.insertCell(2).innerHTML = log.quantity_sold;
+                newRow.insertCell(3).innerHTML = "₹" + log.selling_price;
+            });
+        }
+
+        // --- 3. INJECT CALCULATIONS INTO HTML ---
+        document.getElementById("totalRevenue").innerText = "₹" + totalRevenueAmount;
+        document.getElementById("totalSold").innerText = totalItemsSold;
+        document.getElementById("lowStockCount").innerText = lowStockItems;
+
+        // --- 4. SEARCH FILTER LOGIC ---
+        const searchInput = document.getElementById("searchInput");
+        if (searchInput) {
+            searchInput.addEventListener("keyup", function() {
+                const filter = searchInput.value.toLowerCase();
+                const rows = table.getElementsByTagName("tr");
+
+                for (let i = 2; i < rows.length; i++) {
+                    const itemNameCell = rows[i].getElementsByTagName("td")[1];
+                    if (itemNameCell) {
+                        const txtValue = itemNameCell.textContent || itemNameCell.innerText;
+                        if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                            rows[i].style.display = ""; 
+                        } else {
+                            rows[i].style.display = "none";
+                        }
+                    }       
+                }
+            });
+        }
+    })
+    .catch(error => console.error("Error loading inventory:", error));
 const addForm = document.getElementById("addItemForm");
 addForm.addEventListener("submit", function(event) {
     event.preventDefault();

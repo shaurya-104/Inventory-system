@@ -148,7 +148,7 @@ def process_sale():
             return jsonify({"status": "error", "message": "Not enough stock!"}), 400
 
     db.session.commit()
-    return jsonify({"status": "success"})
+    return jsonify({"status": "success"}) 
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0',debug=True)
