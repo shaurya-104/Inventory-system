@@ -12,9 +12,8 @@ fetch('/api/inventory')
         const purchase_price = data.Inventory_data.purchase_price
         const listing_price = data.Inventory_data.listing_price
         
-        const id_user = data.user_data.id
         const ussername = data.user_data.user_name
-
+        
         const quantity_sold = data.user.sell_logs.quantity_sold
         const worker_name = data.user.sell_logs.worker_name
         const sold_item = data.user.sell_logs.item_name

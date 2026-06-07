@@ -52,9 +52,34 @@ def admin_dashboard():
 def get_inventory():
     get_all_Items = Items.query.all()
     get_all_userdata = userdata.query.all()
+    get_all_logs = logs.query.all()
+    item_list = []
+    user_list = []
+    log = []
+    for item in get_all_Items:
+        item_list.append({
+            'id': item.id,
+            'item_name': item.item_name,
+            'quantity': item.quantity,
+            'purchase_price': item.purchase_price,
+            'listing_price': item.listing_price
+        })
+    for item in get_all_userdata:
+        user_list.append({
+            'user_name' : item.user_name
+        })
+    for item in get_all_logs:
+        log.append({
+            'quantity_sold' : item.quantity_sold,
+            'worker_name' : item.worker_name,
+            'sold_item' : item.item_name,
+            'selling_price' : item.selling_price         
+        }) 
+        
     return jsonify({
-        'Inventory_data' : get_all_Items,
-        'user_data' : get_all_userdata
+        'Inventory_data' :  item_list,
+        'user_data' : user_list,
+        'sell_logs' : log
     })
 
 if __name__ == "__main__":
