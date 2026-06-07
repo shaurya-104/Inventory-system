@@ -1,15 +1,17 @@
 {%extends "base.html"%}
 {%block title%}Signup Portal{%endblock%}
 {%block content%}
-<form method="POST" action="url_for('signup')">
+<form method="POST" action="{{url_for('signup')}}">
     <label for=""></label>
-    <input type="text" name="username" placeholder="username" required>
-    <input type="text" name="password" placeholder="Create a passsword" required>
+    <input type="text" name="username" placeholder="username" required><br>
+    <input type="text" name="password" placeholder="Create a passsword" required><br>
         <select name="role" id="role" required>
         <option value="admin">Owner</option>
         <option value="employee">employee</option>
-    </select>
-    <label for="key">*if you registered as admin enter the admin key</label>
-    <input type="password" name="key" placeholder="Key">
+    </select><br>
+    <label for="key">*only if you registered as admin enter the admin key</label><br>
+    <input type="password" name="key" placeholder="Key"><br>
+    <input type="submit">
+    <p><a href="{{url_for('login')}}">Back to login</a></p>
 </form>
 {%endblock%}

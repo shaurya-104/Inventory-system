@@ -10,7 +10,7 @@ class Items(db.Model):
     id = db.Column(db.Integer,primary_key=True,unique=True)
     item_name = db.Column(db.Text,unique=True,nullable=True)
     quantity = db.Column(db.Integer,nullable=True)
-    market_price = db.Column(db.Float,nullable=True)
+    purchase_price = db.Column(db.Float,nullable=True)
     listing_price = db.Column(db.Float,nullable=True)
 
     def __repr__(self):

@@ -1,0 +1,21 @@
+{%extends 'base.html'%}
+{%block title%}Admin Dashboard{%endblock%}
+{%block content%}
+<form method='POST' action="{{url_for('admin_dashboard')}}">
+</form>
+<div>
+    <table>
+        <tr>Inventory</tr>
+        <tr>
+        <th>
+            <th>Id</th>
+            <th>Item name</th>
+            <th>Quantity</th>
+            <th>Purchase Price</th>
+            <th>Listing price</th>
+        </th>
+        </tr>
+    </table>
+</div>
+<script src="{{ url_for('static', filename='admin.js') }}"></script>
+{%endblock%}
