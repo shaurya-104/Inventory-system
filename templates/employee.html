@@ -4,17 +4,15 @@
 <div>
     <table id="inventoryTable" border="1" cellpadding="10">
         <tr>
-            <th colspan="6">Inventory</th> 
+            <th colspan="4">Inventory</th> 
         </tr>
         <tr>
             <th>Id</th>
             <th>Item name</th>
             <th>Quantity</th>
-            <th>Purchase Price</th>
             <th>Listing price</th>
-            <th>Actions</th>
         </tr>
     </table>
 </div>
-<script src="employee.js"></script>
+<script src="{{ url_for('static', filename='employee.js') }}"></script>
 {%endblock%}

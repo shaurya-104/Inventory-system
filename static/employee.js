@@ -17,15 +17,11 @@ fetch('/api/inventory')
             const Id = newRow.insertCell(0);
             const Name = newRow.insertCell(1);
             const Quantity = newRow.insertCell(2);
-            const Purchase = newRow.insertCell(3);
-            const Listing = newRow.insertCell(4);
-            const Actions = newRow.insertCell(5);
+            const Listing = newRow.insertCell(3);
 
             Id.innerHTML = item.id;
             Name.innerHTML = item.item_name;
             Quantity.innerHTML = item.quantity;
-            Purchase.innerHTML = "₹" + item.purchase_price;
             Listing.innerHTML = "₹" + item.listing_price;
-            Actions.innerHTML = `<button onclick="openEditModal(${item.id}, '${item.item_name}', ${item.quantity}, ${item.purchase_price}, ${item.listing_price})">Edit</button> <button onclick="confirmDelete(${item.id})">Delete</button>`;
     });
     })
