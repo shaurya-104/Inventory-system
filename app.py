@@ -1,5 +1,6 @@
 from model import app,db,Items,userdata,logs
 from flask import Flask,redirect,request,url_for,render_template,jsonify
+from sqlalchemy import select
 
 @app.route('/',methods=['GET','POST'])
 def login():
@@ -57,6 +58,35 @@ def request_create():
     db.session.commit()
     return jsonify({"status": "success", "message": "Item added to database!"})
 
+@app.route('/api/inventory/edit',methods=['PATCH'])
+def request_edit():
+    item_name = request.json.get('item_name')
+    quantity = request.json.get('quantity')
+    purchase_price = request.json.get('purchase_price')
+    listing_price = request.json.get('listing_price')
+    user_id = request.json.get('old_id')
+
+    user_edit = db.session.get(Items,user_id)
+    if user_edit:
+        user_edit.item_name = item_name
+        user_edit.quantity = quantity
+        user_edit.purchase_price = purchase_price
+        user_edit.listing_price = listing_price
+        db.session.commit()
+        return jsonify({"status": "success", "message": "Item edited in database!"})
+    return jsonify({"status": "error", "message": "Item not found"}), 404
+
+@app.route('/api/inventory/delete',methods=['POST'])
+def request_delete():
+    item_name = request.json.get('item_name')
+    quantity = request.json.get('quantity')
+    purchase_price = request.json.get('purchase_price')
+    listing_price = request.json.get('listing_price')
+    delete_item = Items(item_name=item_name,quantity=quantity,purchase_price=purchase_price,listing_price=listing_price)
+    db.session.delete(delete_item)
+    db.session.commit()
+    return jsonify({"status": "success", "message": "Item edited in database!"})
+    
 @app.route('/api/inventory')
 def get_inventory():
     get_all_Items = Items.query.all()
