@@ -44,7 +44,7 @@ def admin_dashboard():
     if request.method == 'GET':
          return render_template('admin.html')
     if request.method == 'POST':
-
+        return ""
 
 
 
