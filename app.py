@@ -15,7 +15,7 @@ def login():
             if user.role == 'admin':
                 return redirect(url_for('admin_dashboard'))
             elif user.role == 'employee':
-                return redirect(url_for(employee))
+                return redirect(url_for('employee'))
             else :
                 return "user with this role is not present"
         else :
