@@ -27,7 +27,7 @@ class userdata(db.Model):
     
 class logs(db.Model):
     id = db.Column(db.Integer,primary_key=True,unique=True)
-    worker_name = db.Column(db.Text,unique=True,nullable=True)
+    worker_name = db.Column(db.Text,nullable=True)
     selling_price = db.Column(db.Float,nullable=True)
     item_name = db.Column(db.Text,nullable=True)
     quantity_sold = db.Column(db.Integer,nullable=True)

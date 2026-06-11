@@ -46,11 +46,9 @@ fetch('/api/inventory')
         let totalItemsSold = 0;
         let lowStockItems = 0;
 
-        // --- 1. POPULATE INVENTORY & FLAG LOW STOCK ---
         Inventory_data.forEach(item => {
             const newRow = table.insertRow(-1);
 
-            // Logic: If quantity is under 5, add class and increment counter
             if (item.quantity < 5) {
                 newRow.classList.add("low-stock");
                 lowStockItems++;
@@ -71,14 +69,11 @@ fetch('/api/inventory')
             Actions.innerHTML = `<button onclick="openEditModal(${item.id}, '${item.item_name}', ${item.quantity}, ${item.purchase_price}, ${item.listing_price})">Edit</button> <button onclick="confirmDelete(${item.id})">Delete</button>`;
         });
 
-        // --- 2. POPULATE LOGS & CALCULATE MATH ---
         if (sell_logs) {
             sell_logs.forEach(log => {
-                // Calculate totals
                 totalRevenueAmount += (log.selling_price * log.quantity_sold);
                 totalItemsSold += log.quantity_sold;
 
-                // Build the logs table rows
                 const newRow = logsTable.insertRow(-1);
                 newRow.insertCell(0).innerHTML = log.worker_name || "Employee"; 
                 newRow.insertCell(1).innerHTML = log.sold_item;
@@ -86,13 +81,10 @@ fetch('/api/inventory')
                 newRow.insertCell(3).innerHTML = "₹" + log.selling_price;
             });
         }
-
-        // --- 3. INJECT CALCULATIONS INTO HTML ---
         document.getElementById("totalRevenue").innerText = "₹" + totalRevenueAmount;
         document.getElementById("totalSold").innerText = totalItemsSold;
         document.getElementById("lowStockCount").innerText = lowStockItems;
 
-        // --- 4. SEARCH FILTER LOGIC ---
         const searchInput = document.getElementById("searchInput");
         if (searchInput) {
             searchInput.addEventListener("keyup", function() {

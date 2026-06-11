@@ -1,7 +1,9 @@
 from model import app,db,Items,userdata,logs
-from flask import Flask,redirect,request,url_for,render_template,jsonify
+from flask import Flask, redirect, request, url_for, render_template, jsonify, session
+import os
 from sqlalchemy import select
 
+app.secret_key = os.urandom(24)
 @app.route('/',methods=['GET','POST'])
 def login():
     if request.method=='GET':
@@ -12,6 +14,11 @@ def login():
 
         user = userdata.query.filter_by(user_name=username).first()
         if user and user.password == password:
+            user = userdata.query.filter_by(user_name=username).first()
+        if user and user.password == password:
+            session['username'] = user.user_name
+            session['role'] = user.role
+            
             if user.role == 'admin':
                 return redirect(url_for('admin_dashboard'))
             elif user.role == 'employee':
@@ -25,7 +32,7 @@ def signup():
     if request.method == 'GET':
         return render_template('signup.html')
     if request.method == 'POST':
-       username = request.form.get('username')
+       username = request.form.get('username')  
        password = request.form.get('password')
        role = request.form.get('role')
        key = request.form.get('key')
@@ -136,9 +143,9 @@ def process_sale():
         inventory_item = Items.query.filter_by(item_name=item['name']).first()
         if inventory_item and inventory_item.quantity >= item['qty']:
             inventory_item.quantity -= item['qty']
-            
+            current_worker = session.get('username', 'Unknown Employee') 
             new_log = logs(
-                worker_name="current_user_name",
+                worker_name=current_worker,
                 selling_price=item['price'],
                 item_name=item['name'],
                 quantity_sold=item['qty']
